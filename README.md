@@ -1,24 +1,32 @@
-# 베스퍼 회랑 (Vesper) — 다크SF 픽셀 라인배틀러
+# 베스퍼 회랑 (Vesper) — 다크 SF 라인배틀러
 
-Godot로 개발 중인 다크 SF 픽셀아트 라인배틀러 게임. 카운터사이드류 전투를 개선한 방향.
+Godot으로 개발 중인 다크 SF 라인배틀러입니다. 이 저장소에는 실제 전투 화면과 현재 사용 중인 캐릭터 에셋 파이프라인의 결과를 공개합니다.
 
-> 미공개 게임(개발 중). 이 저장소는 아트·파이프라인 설명이며 게임 소스/디자인은 비공개입니다.
+> 게임 소스와 디자인 문서는 비공개입니다. 아래 이미지는 Godot 런타임에서 직접 캡처한 화면과 내보낸 프레임입니다.
 
-<p>
-  <img src="screenshots/character.png" width="200">
-  <img src="screenshots/combat.gif" width="320">
+## 실제 인게임 화면
+
+<p align="center">
+  <img src="screenshots/ingame.png" width="760" alt="Vesper Godot battle scene">
 </p>
 
-## 아트 파이프라인 (핵심)
-인게임 스프라이트는 **AI 일러스트 → 자동 픽셀화** 파이프라인으로 제작:
-- 고해상 캐릭터 일러(사격 모션 등 포즈 프레임) → **감마보정 다운스케일 + OKLab 팔레트 통일**로 게임 스프라이트화
-- 캐릭터별 잠긴 팔레트로 walk/combat 등 모든 모션 색 일관성 자동 유지
-- 이 파이프라인을 재사용 가능한 MCP 서버로 코드화 → [**PixelForge MCP**](https://github.com/mindsurf0176-ui/pixelforge-mcp)
+## 애니메이션 상태별 프레임
 
-> 위 combat GIF은 256px 일러 9프레임을 PixelForge로 픽셀화·팔레트 통일한 결과.
+| IDLE | WALK | AIM | ATTACK | HIT | DEATH |
+|---|---|---|---|---|---|
+| <img src="screenshots/sprite_idle.png" width="110" alt="idle frame"> | <img src="screenshots/sprite_walk.png" width="110" alt="walk frame"> | <img src="screenshots/sprite_aim.png" width="110" alt="aim frame"> | <img src="screenshots/sprite_attack.png" width="110" alt="attack frame"> | <img src="screenshots/sprite_hit.png" width="110" alt="hit frame"> | <img src="screenshots/sprite_death.png" width="110" alt="death frame"> |
+
+## 캐릭터 에셋 파이프라인
+
+- `idle · walk · aim · attack · hit · death` 6개 상태, 런타임 프레임 33개
+- 파츠 추출, 리그 매니페스트, 포즈 생성, 프레임 렌더, 아틀라스와 Godot 씬 내보내기를 Python 도구 16개로 분리
+- 같은 FK 계산을 서로 다른 단계에서 대조해 관절 좌표 오차를 0.5px 이내로 검증
+- Godot headless import/load 검증 뒤 실제 전투 씬에서 방향 전환·애니메이션 상태를 확인
 
 ## 기술
-Godot 4 · GDScript · AI 일러 생성 + 자동 픽셀화 파이프라인(PixelForge)
+
+Godot 4.6 · GDScript · Python · Pillow/NumPy · ffmpeg · headless runtime QA
 
 ## 상태
-전투 코어 개발 중 (MVP1 완성)
+
+캐릭터 애니메이션을 전투 씬에 통합하고 런타임 QA를 진행 중입니다.
